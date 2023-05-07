@@ -1,0 +1,26 @@
+name: Arduino CLI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Arduino CLI
+        uses: per1234/setup-arduino-cli@v1.1.0
+
+      - name: Build firmware
+        run: |
+          arduino-cli core update-index --debug
+          arduino-cli core install esp32:esp32 --debug
+          arduino-cli compile --fqbn esp32:esp32:nodeMCU32@1.0 --upload mqtt-dht-arduino
+
